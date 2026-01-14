@@ -1,0 +1,70 @@
+{
+  "recommandations": [
+    {
+      "classification": "Poids insuffisant",
+      "imc_min": 0,
+      "imc_max": 18.4,
+      "risque": "Accru",
+      "conseils": [
+        "Augmenter l’apport calorique de façon saine",
+        "Manger plus fréquemment",
+        "Consulter un professionnel de santé"
+      ]
+    },
+    {
+      "classification": "Poids normal",
+      "imc_min": 18.5,
+      "imc_max": 24.9,
+      "risque": "Moindre",
+      "conseils": [
+        "Maintenir une alimentation équilibrée",
+        "Faire de l’activité physique régulièrement",
+        "Surveiller son poids"
+      ]
+    },
+    {
+      "classification": "Excès de poids",
+      "imc_min": 25.0,
+      "imc_max": 29.9,
+      "risque": "Accru",
+      "conseils": [
+        "Réduire les aliments riches en sucre et en gras",
+        "Augmenter l’activité physique",
+        "Adopter de bonnes habitudes alimentaires"
+      ]
+    },
+    {
+      "classification": "Obésité classe I",
+      "imc_min": 30.0,
+      "imc_max": 34.9,
+      "risque": "Élevé",
+      "conseils": [
+        "Consulter un professionnel de santé",
+        "Mettre en place un programme alimentaire adapté",
+        "Pratiquer une activité physique encadrée"
+      ]
+    },
+    {
+      "classification": "Obésité classe II",
+      "imc_min": 35.0,
+      "imc_max": 39.9,
+      "risque": "Très élevé",
+      "conseils": [
+        "Suivi médical régulier",
+        "Programme nutritionnel personnalisé",
+        "Activité physique adaptée"
+      ]
+    },
+    {
+      "classification": "Obésité classe III",
+      "imc_min": 40.0,
+      "imc_max": 100,
+      "risque": "Extrêmement élevé",
+      "conseils": [
+        "Suivi médical spécialisé",
+        "Programme thérapeutique intensif",
+        "Surveillance médicale continue"
+      ]
+    }
+  ]
+}
