@@ -3,15 +3,16 @@ from datetime import datetime
 from tkinter import messagebox
 from IMC import IMC
 from SauvegardeIMC import SauvegardeIMC
-
-
+from RecommandationSante import RecommandationSante
 class IMCAppGUI:
     def __init__(self):
         self.root = tk.Tk()
+        self.recos =  RecommandationSante()
+        self.recos.charger_json()
 
 
 #Prend les resultats des entree ecrite et affiche les resulttats
-    def afficher_resultat(self, imc, classification):
+    def afficher_resultat(self, imc, classification,texte):
         self.entry_imc.config(state="normal")
         self.entry_rdds.config(state="normal")
 
@@ -23,6 +24,11 @@ class IMCAppGUI:
 
         self.entry_imc.config(state="readonly")
         self.entry_rdds.config(state="readonly")
+
+        self.text_reco.config(state="normal")
+        self.text_reco.delete("1.0", "end")
+        self.text_reco.insert("1.0", texte)
+        self.text_reco.config(state="disabled")
 
 
 
@@ -60,6 +66,7 @@ class IMCAppGUI:
 
                 donne_IMC=IMC(poids_float,taille_float)
                 imc_resultat=donne_IMC.calculerIMC()
+                risque_resultat = donne_IMC.get_risque(imc_resultat)
 
                 classification_resultat=donne_IMC.get_classification(imc_resultat)
                 risque_resultat = donne_IMC.get_risque(imc_resultat)
@@ -86,8 +93,14 @@ class IMCAppGUI:
                                                f"{imc_resultat:7.2f}",str(classification_resultat),
                                                str(risque_resultat))
 
+                reco = self.recos.trouver_pour_imc(imc_resultat)
+                if reco:
+                    texte = "• " + "\n• ".join(reco["conseils"])
+                else:
+                    texte = "Aucune recommandation trouvée."
 
-                self.afficher_resultat(imc_resultat,classification_resultat)
+
+                self.afficher_resultat(imc_resultat,classification_resultat,texte)
 
 
 
@@ -110,7 +123,7 @@ class IMCAppGUI:
     def afficher_fenetre(self):
         self.entry_data=[]
         self.entry_data_readOnly = []
-        self.root.geometry("700x400")
+        self.root.geometry("1000x800")
         self.root.resizable(False, False)
         self.root.title("Calculateur d'indice de masse corporel")
 
@@ -151,6 +164,11 @@ class IMCAppGUI:
         self.entry_rdds.config(state="readonly")
         self.entry_data_readOnly.append(self.entry_rdds)
 
+        tk.Label(params2, text="Recommandations:").grid(row=2, column=0, sticky="nw", pady=5)
+        self.text_reco = tk.Text(params2, height=5, width=40)
+        self.text_reco.grid(row=2, column=1, padx=10, pady=5)
+        self.text_reco.config(state="disabled")
+
         params3 = tk.LabelFrame(self.root, text="", padx=10, pady=10)
         params3.grid_columnconfigure(0,weight=1)
         params3.pack(padx=15, pady=10, fill="x")
@@ -169,8 +187,8 @@ class IMCAppGUI:
         self.button_calculer.grid(row=0, column=3, pady=5)
 
 
-        self.root.mainloop()
 
+        self.root.mainloop()
 
 
 
