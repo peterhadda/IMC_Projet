@@ -81,6 +81,11 @@ class IMCAppGUI:
                 data_to_fichier=SauvegardeIMC(data_imc)
                 data_to_fichier.sauvegarde_ficher()
 
+                data_to_bd=SauvegardeIMC(data_imc)
+                data_to_bd.sauvegarder_dataIMC(current_time_string,text_taille,text_poids,
+                                               f"{imc_resultat:7.2f}",str(classification_resultat),
+                                               str(risque_resultat))
+
 
                 self.afficher_resultat(imc_resultat,classification_resultat)
 
@@ -165,6 +170,9 @@ class IMCAppGUI:
 
 
         self.root.mainloop()
+
+
+
 
 
 
