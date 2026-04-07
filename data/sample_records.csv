@@ -1,0 +1,16 @@
+weight,height,age,gender,activity_level,bmi_value,bmi_category,risk_level_rule,risk_level_ml,prediction_confidence,created_at
+48.0,1.68,22,Femme,Faible,17.01,Poids insuffisant,Accru,Accru,0.88,2026-04-01T08:15:00
+52.0,1.72,25,Homme,Moderee,17.58,Poids insuffisant,Accru,Accru,0.84,2026-04-01T09:40:00
+60.0,1.65,31,Femme,Moderee,22.04,Poids normal,Moindre,Moindre,0.93,2026-04-01T11:10:00
+68.0,1.75,29,Homme,Elevee,22.20,Poids normal,Moindre,Moindre,0.95,2026-04-01T14:05:00
+72.0,1.80,28,Homme,Moderee,22.22,Poids normal,Moindre,Moindre,0.91,2026-04-02T10:30:00
+74.0,1.69,45,Femme,Faible,25.91,Exces de poids,Accru,Accru,0.82,2026-04-02T13:20:00
+81.0,1.78,39,Homme,Moderee,25.56,Exces de poids,Accru,Accru,0.80,2026-04-02T16:45:00
+85.0,1.70,50,Femme,Faible,29.41,Exces de poids,Accru,Eleve,0.68,2026-04-03T09:00:00
+92.0,1.74,36,Homme,Faible,30.40,Obesite classe I,Eleve,Eleve,0.87,2026-04-03T12:10:00
+97.0,1.71,42,Femme,Moderee,33.17,Obesite classe I,Eleve,Eleve,0.85,2026-04-03T15:25:00
+105.0,1.73,47,Homme,Faible,35.09,Obesite classe II,Tres eleve,Tres eleve,0.89,2026-04-04T08:50:00
+110.0,1.67,54,Femme,Faible,39.44,Obesite classe II,Tres eleve,Tres eleve,0.92,2026-04-04T11:35:00
+118.0,1.72,58,Homme,Faible,39.89,Obesite classe II,Tres eleve,Extremement eleve,0.66,2026-04-04T17:15:00
+125.0,1.70,61,Femme,Faible,43.25,Obesite classe III,Extremement eleve,Extremement eleve,0.96,2026-04-05T10:05:00
+138.0,1.76,49,Homme,Moderee,44.55,Obesite classe III,Extremement eleve,Extremement eleve,0.94,2026-04-05T13:40:00
