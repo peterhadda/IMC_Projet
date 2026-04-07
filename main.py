@@ -30,7 +30,7 @@ def initialize_services():
         "validator": UserInputValidator(),
         "imc_service": IMCService(),
         "recommendation_service": RecommendationService(app_config["recommendation_path"]),
-        "storage_service": StorageService(),
+        "storage_service": StorageService(db_path),
     }
     return services
 

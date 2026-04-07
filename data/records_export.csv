@@ -1,0 +1,2 @@
+id,weight,height,age,gender,activity_level,bmi_value,bmi_category,risk_level_rule,risk_level_ml,prediction_confidence,created_at
+1,72.0,1.8,28,Homme,Moderee,22.22,Poids normal,Moindre,,,2026-04-07T19:04:28

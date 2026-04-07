@@ -120,7 +120,9 @@ class IMCApplicationGUI:
             return
 
         prediction_data = {
-            "message": "Prediction non disponible dans cette etape. Le module est reserve a la suite du projet."
+            "risk_level_ml": None,
+            "prediction_confidence": None,
+            "message": "Prediction non disponible dans cette etape. Le module est reserve a la suite du projet.",
         }
         self.current_prediction = prediction_data
         self.display_prediction(prediction_data)
@@ -133,6 +135,7 @@ class IMCApplicationGUI:
         self.services["storage_service"].save_result(
             self.current_user_profile,
             self.current_result["bmi_result"],
+            self.current_prediction,
         )
         self.status_message.config(text="Resultat sauvegarde.")
 
