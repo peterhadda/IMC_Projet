@@ -6,9 +6,9 @@
       "imc_max": 18.4,
       "risque": "Accru",
       "conseils": [
-        "Augmenter l’apport calorique de façon saine",
-        "Manger plus fréquemment",
-        "Consulter un professionnel de santé"
+        "Augmenter l'apport calorique de facon saine.",
+        "Manger plus frequemment avec des repas reguliers.",
+        "Consulter un professionnel de sante si la perte de poids persiste."
       ]
     },
     {
@@ -17,53 +17,53 @@
       "imc_max": 24.9,
       "risque": "Moindre",
       "conseils": [
-        "Maintenir une alimentation équilibrée",
-        "Faire de l’activité physique régulièrement",
-        "Surveiller son poids"
+        "Maintenir une alimentation equilibree.",
+        "Faire de l'activite physique regulierement.",
+        "Surveiller l'evolution du poids dans le temps."
       ]
     },
     {
-      "classification": "Excès de poids",
+      "classification": "Exces de poids",
       "imc_min": 25.0,
       "imc_max": 29.9,
       "risque": "Accru",
       "conseils": [
-        "Réduire les aliments riches en sucre et en gras",
-        "Augmenter l’activité physique",
-        "Adopter de bonnes habitudes alimentaires"
+        "Reduire les aliments tres sucres et tres gras.",
+        "Augmenter progressivement l'activite physique.",
+        "Adopter des habitudes alimentaires stables."
       ]
     },
     {
-      "classification": "Obésité classe I",
+      "classification": "Obesite classe I",
       "imc_min": 30.0,
       "imc_max": 34.9,
-      "risque": "Élevé",
+      "risque": "Eleve",
       "conseils": [
-        "Consulter un professionnel de santé",
-        "Mettre en place un programme alimentaire adapté",
-        "Pratiquer une activité physique encadrée"
+        "Consulter un professionnel de sante.",
+        "Mettre en place un programme alimentaire adapte.",
+        "Pratiquer une activite physique encadree."
       ]
     },
     {
-      "classification": "Obésité classe II",
+      "classification": "Obesite classe II",
       "imc_min": 35.0,
       "imc_max": 39.9,
-      "risque": "Très élevé",
+      "risque": "Tres eleve",
       "conseils": [
-        "Suivi médical régulier",
-        "Programme nutritionnel personnalisé",
-        "Activité physique adaptée"
+        "Demander un suivi medical regulier.",
+        "Suivre un programme nutritionnel personnalise.",
+        "Choisir une activite physique adaptee."
       ]
     },
     {
-      "classification": "Obésité classe III",
+      "classification": "Obesite classe III",
       "imc_min": 40.0,
       "imc_max": 100,
-      "risque": "Extrêmement élevé",
+      "risque": "Extremement eleve",
       "conseils": [
-        "Suivi médical spécialisé",
-        "Programme thérapeutique intensif",
-        "Surveillance médicale continue"
+        "Mettre en place un suivi medical specialise.",
+        "Construire un programme therapeutique intensif.",
+        "Assurer une surveillance medicale continue."
       ]
     }
   ]
