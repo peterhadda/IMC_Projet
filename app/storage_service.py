@@ -149,6 +149,34 @@ class StorageService:
             "by_risk_level_rule": by_rule_risk,
         }
 
+    def get_user_history(self):
+        return self.fetch_all_records()
+
+    def count_total_records(self):
+        return len(self.fetch_all_records())
+
+    def calculate_average_bmi(self):
+        stats = self.fetch_statistics()
+        return stats["global"].get("avg_bmi")
+
+    def count_by_bmi_category(self):
+        stats = self.fetch_statistics()
+        return stats["by_bmi_category"]
+
+    def count_by_ml_prediction(self):
+        with sqlite3.connect(self.database_path) as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute(
+                f"""
+                SELECT risk_level_ml, COUNT(*) AS total
+                FROM {self.table_name}
+                GROUP BY risk_level_ml
+                ORDER BY total DESC, risk_level_ml ASC
+                """
+            )
+            return [dict(row) for row in cursor.fetchall()]
+
     def export_records_to_csv(self, output_path):
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -176,18 +204,37 @@ class StorageService:
 
         return str(output_path)
 
+    def save_application_record(self, record_data):
+        user_input = record_data["user_input"]
+        bmi_result = record_data["bmi_result"]
+        prediction_result = record_data.get("prediction_result") or {}
+
+        flattened_record = {
+            "weight": user_input["weight"],
+            "height": user_input["height"],
+            "age": user_input["age"],
+            "gender": user_input["gender"],
+            "activity_level": user_input["activity_level"],
+            "bmi_value": bmi_result["bmi_value"],
+            "bmi_category": bmi_result["bmi_category"],
+            "risk_level_rule": bmi_result["risk_level_rule"],
+            "risk_level_ml": prediction_result.get("predicted_risk"),
+            "prediction_confidence": prediction_result.get("confidence_score"),
+            "created_at": record_data.get("created_at"),
+        }
+        return self.save_user_record(flattened_record)
+
     def save_result(self, user_profile, bmi_result, prediction_data=None):
         prediction_data = prediction_data or {}
         record_data = {
-            "weight": user_profile["weight"],
-            "height": user_profile["height"],
-            "age": user_profile["age"],
-            "gender": user_profile["gender"],
-            "activity_level": user_profile["activity_level"],
-            "bmi_value": bmi_result["bmi_value"],
-            "bmi_category": bmi_result["bmi_category"],
-            "risk_level_rule": bmi_result["risk_level"],
-            "risk_level_ml": prediction_data.get("risk_level_ml"),
-            "prediction_confidence": prediction_data.get("prediction_confidence"),
+            "user_input": user_profile,
+            "bmi_result": {
+                **bmi_result,
+                "risk_level_rule": bmi_result.get("risk_level_rule", bmi_result.get("risk_level")),
+            },
+            "prediction_result": {
+                "predicted_risk": prediction_data.get("predicted_risk", prediction_data.get("risk_level_ml")),
+                "confidence_score": prediction_data.get("confidence_score", prediction_data.get("prediction_confidence")),
+            },
         }
-        return self.save_user_record(record_data)
+        return self.save_application_record(record_data)

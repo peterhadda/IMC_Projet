@@ -38,4 +38,5 @@ class IMCService:
             "bmi_value": round(bmi_value, 2),
             "bmi_category": bmi_category,
             "risk_level": risk_level,
+            "risk_level_rule": risk_level,
         }

@@ -2,11 +2,13 @@ from pathlib import Path
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
 from sklearn.tree import DecisionTreeClassifier
 
 try:
     from evaluate_model import evaluate_model, save_evaluation_report
     from preprocess import (
+        build_preprocessing_pipeline,
         categorical_features,
         feature_columns,
         numeric_features,
@@ -17,6 +19,7 @@ try:
 except ModuleNotFoundError:
     from ml.evaluate_model import evaluate_model, save_evaluation_report
     from ml.preprocess import (
+        build_preprocessing_pipeline,
         categorical_features,
         feature_columns,
         numeric_features,
@@ -40,6 +43,15 @@ def _validate_training_data(X_train, y_train):
         raise ValueError("Le jeu d'entrainement est vide.")
 
 
+def _build_training_pipeline(classifier):
+    return Pipeline(
+        steps=[
+            ("preprocessor", build_preprocessing_pipeline()),
+            ("classifier", classifier),
+        ]
+    )
+
+
 def _build_training_result(model_name, model, evaluation_report, extra_data=None):
     result = {
         "model_name": model_name,
@@ -58,16 +70,26 @@ def _build_training_result(model_name, model, evaluation_report, extra_data=None
     return result
 
 
-def train_logistic_regression(X_train, y_train, X_test, y_test):
+def train_logistic_regression(X_train, y_train, X_test=None, y_test=None):
     _validate_training_data(X_train, y_train)
 
-    model = LogisticRegression(max_iter=1000, random_state=42)
-    model.fit(X_train, y_train)
-    evaluation_report = evaluate_model(model, X_test, y_test, "Logistic Regression")
+    trained_model = _build_training_pipeline(
+        LogisticRegression(max_iter=1000, random_state=42)
+    )
+    trained_model.fit(X_train, y_train)
+
+    evaluation_X = X_test if X_test is not None else X_train
+    evaluation_y = y_test if y_test is not None else y_train
+    evaluation_report = evaluate_model(
+        trained_model,
+        evaluation_X,
+        evaluation_y,
+        "Logistic Regression",
+    )
 
     return _build_training_result(
         "Logistic Regression",
-        model,
+        trained_model,
         evaluation_report,
         extra_data={
             "parameters": {
@@ -78,25 +100,34 @@ def train_logistic_regression(X_train, y_train, X_test, y_test):
     )
 
 
-def train_decision_tree(X_train, y_train, X_test, y_test):
+def train_decision_tree(X_train, y_train, X_test=None, y_test=None):
     _validate_training_data(X_train, y_train)
 
-    model = DecisionTreeClassifier(
+    classifier = DecisionTreeClassifier(
         random_state=42,
         max_depth=5,
         min_samples_split=2,
         min_samples_leaf=1,
     )
-    model.fit(X_train, y_train)
-    evaluation_report = evaluate_model(model, X_test, y_test, "Decision Tree")
+    trained_model = _build_training_pipeline(classifier)
+    trained_model.fit(X_train, y_train)
+
+    evaluation_X = X_test if X_test is not None else X_train
+    evaluation_y = y_test if y_test is not None else y_train
+    evaluation_report = evaluate_model(
+        trained_model,
+        evaluation_X,
+        evaluation_y,
+        "Decision Tree",
+    )
 
     return _build_training_result(
         "Decision Tree",
-        model,
+        trained_model,
         evaluation_report,
         extra_data={
-            "depth": model.get_depth(),
-            "n_nodes": model.tree_.node_count,
+            "depth": classifier.get_depth(),
+            "n_nodes": classifier.tree_.node_count,
             "parameters": {
                 "random_state": 42,
                 "max_depth": 5,
@@ -107,7 +138,7 @@ def train_decision_tree(X_train, y_train, X_test, y_test):
     )
 
 
-def train_random_forest(X_train, y_train, X_test, y_test):
+def train_random_forest(X_train, y_train, X_test=None, y_test=None):
     _validate_training_data(X_train, y_train)
 
     n_estimators = 100
@@ -116,19 +147,28 @@ def train_random_forest(X_train, y_train, X_test, y_test):
     min_samples_split = 2
     min_samples_leaf = 1
 
-    model = RandomForestClassifier(
+    classifier = RandomForestClassifier(
         n_estimators=n_estimators,
         random_state=random_state,
         max_depth=max_depth,
         min_samples_split=min_samples_split,
         min_samples_leaf=min_samples_leaf,
     )
-    model.fit(X_train, y_train)
-    evaluation_report = evaluate_model(model, X_test, y_test, "Random Forest")
+    trained_model = _build_training_pipeline(classifier)
+    trained_model.fit(X_train, y_train)
+
+    evaluation_X = X_test if X_test is not None else X_train
+    evaluation_y = y_test if y_test is not None else y_train
+    evaluation_report = evaluate_model(
+        trained_model,
+        evaluation_X,
+        evaluation_y,
+        "Random Forest",
+    )
 
     return _build_training_result(
         "Random Forest",
-        model,
+        trained_model,
         evaluation_report,
         extra_data={
             "parameters": {
@@ -215,28 +255,33 @@ def train_best_model(X_train, y_train, X_test, y_test, feature_config=None):
 def main():
     preprocessing_result = run_preprocessing()
     encoded_feature_names = []
-    if "pipeline" in preprocessing_result and hasattr(preprocessing_result["pipeline"], "get_feature_names_out"):
-        encoded_feature_names = list(preprocessing_result["pipeline"].get_feature_names_out())
+    training_result = train_best_model(
+        preprocessing_result["X_train"],
+        preprocessing_result["y_train"],
+        preprocessing_result["X_test"],
+        preprocessing_result["y_test"],
+    )
 
+    best_pipeline = training_result["best_model"]
+    if hasattr(best_pipeline.named_steps["preprocessor"], "get_feature_names_out"):
+        encoded_feature_names = list(best_pipeline.named_steps["preprocessor"].get_feature_names_out())
+
+    best_classifier = best_pipeline.named_steps["classifier"]
     label_mapping = {
         label: index
-        for index, label in enumerate(sorted(preprocessing_result["y_train"].astype(str).unique()))
+        for index, label in enumerate(best_classifier.classes_)
     }
 
-    training_result = train_best_model(
-        preprocessing_result["X_train_processed"],
-        preprocessing_result["y_train"],
-        preprocessing_result["X_test_processed"],
-        preprocessing_result["y_test"],
-        feature_config={
-            "feature_order": feature_columns,
-            "target_column": target_column,
-            "numeric_features": numeric_features,
-            "categorical_features": categorical_features,
-            "encoded_feature_names": encoded_feature_names,
-            "label_mapping": label_mapping,
-        },
-    )
+    feature_config = {
+        "feature_order": feature_columns,
+        "target_column": target_column,
+        "numeric_features": numeric_features,
+        "categorical_features": categorical_features,
+        "encoded_feature_names": encoded_feature_names,
+        "label_mapping": label_mapping,
+        "model_name": training_result["best_model_name"],
+    }
+    training_result["feature_config_path"] = save_feature_config(feature_config, feature_config_output_path)
 
     print(f"Meilleur modele: {training_result['best_model_name']}")
     print(f"Meilleur score (test): {training_result['best_score']:.4f}")
