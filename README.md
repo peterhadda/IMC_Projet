@@ -1,105 +1,178 @@
-IMC_PROJET – PROJET PIPELINE
+# IMC_Projet
 
-IMC_Projet est une application développée en Python suivant une architecture de type pipeline.
-Elle permet de calculer l’Indice de Masse Corporelle (IMC), d’analyser le résultat, de générer des recommandations de santé et de sauvegarder les données utilisateur.
+Application Python de calcul d'IMC avec interface graphique, recommandations, historique SQLite et preparation de donnees pour le machine learning.
 
-DESCRIPTION DU PROJET
+## Objectifs
 
-Ce projet est conçu comme un pipeline de traitement, où chaque étape est clairement séparée et gérée par un module indépendant.
-Les données circulent d’une étape à l’autre de manière séquentielle, ce qui rend le projet structuré, lisible et facile à maintenir.
+- calculer l'IMC a partir du poids et de la taille
+- classifier le resultat selon des regles metier simples
+- generer des recommandations de sante
+- sauvegarder l'historique utilisateur
+- preparer un dataset propre pour les etapes ML
 
-ARCHITECTURE PIPELINE
+## Architecture
 
-Le fonctionnement du pipeline est le suivant :
+Le projet est organise en couches.
 
-Entrée utilisateur (interface graphique)
-→ Calcul de l’IMC
-→ Analyse du niveau de risque
-→ Recommandations de santé
-→ Sauvegarde des données
+### Application
 
-Chaque étape reçoit les données, les traite, puis transmet le résultat à l’étape suivante.
+- `main.py`
+  - point d'entree
+  - charge la configuration
+  - initialise les services
+  - lance la GUI
 
-FONCTIONNALITÉS
+- `app/gui.py`
+  - interface graphique
+  - recuperation des saisies utilisateur
+  - affichage des resultats
+  - appel aux services metier
 
-Interface graphique pour la saisie du poids et de la taille
+- `app/validator.py`
+  - validation des donnees saisies
 
-Calcul automatique de l’Indice de Masse Corporelle
+- `app/imc_service.py`
+  - calcul IMC
+  - classification IMC
+  - determination du niveau de risque
 
-Classification selon les normes de santé
+- `app/recommendation_service.py`
+  - recommandations par categorie IMC et niveau de risque
 
-Recommandations adaptées au résultat
+- `app/storage_service.py`
+  - creation de la base SQLite
+  - sauvegarde et lecture des enregistrements
+  - export CSV
 
-Sauvegarde des données dans un fichier texte
+### Machine Learning
 
-Architecture modulaire de type pipeline
+- `ml/prepare_dataset.py`
+  - lecture des donnees brutes
+  - standardisation des colonnes
+  - nettoyage
+  - creation de `target_risk`
+  - sauvegarde du dataset prepare
 
-PRÉREQUIS
+- `ml/preprocess.py`
+  - separation features / cible
+  - encodage des variables categorielles
+  - normalisation des variables numeriques
+  - split train / test
 
-Python version 3.x
+## Structure
 
-Bibliothèques Python standards (exemple : tkinter)
+```text
+IMC_Projet/
+├── main.py
+├── app/
+├── data/
+│   ├── raw/
+│   └── prepared/
+├── ml/
+└── README.md
+```
 
-INSTALLATION
+## Donnees
 
-Cloner le dépôt GitHub :
+### Donnees brutes
+
+- `data/raw/sample_records.csv`
+- `data/raw/records_export.csv`
+- `data/raw/recommandations.json`
+
+### Donnees preparees
+
+- `data/prepared/imc_dataset_prepared.csv`
+
+### Base SQLite
+
+- `data/data_imc.db`
+
+## Schema de stockage
+
+La table principale stocke notamment :
+
+- `id`
+- `weight`
+- `height`
+- `age`
+- `gender`
+- `activity_level`
+- `bmi_value`
+- `bmi_category`
+- `risk_level_rule`
+- `risk_level_ml`
+- `prediction_confidence`
+- `created_at`
+
+## Prerequis
+
+- Python 3.x
+- `tkinter`
+- `pandas`
+- `scikit-learn`
+
+## Installation
+
+```bash
 git clone https://github.com/peterhadda/IMC_Projet.git
-
-Accéder au dossier du projet :
 cd IMC_Projet
+```
 
-Lancer l’application :
+Si besoin :
+
+```bash
+pip install pandas scikit-learn
+```
+
+## Lancer l'application
+
+```bash
 python main.py
+```
 
-STRUCTURE DU PROJET
+## Generer le dataset ML
 
-main.py
-Orchestration du pipeline et lancement de l’application
+```bash
+python ml/prepare_dataset.py
+```
 
-IMCAppGUI.py
-Gestion de l’interface utilisateur et des entrées
+Fichier genere :
 
-IMC.py
-Calcul de l’indice de masse corporelle
+- `data/prepared/imc_dataset_prepared.csv`
 
-RecommandationSante.py
-Analyse du résultat et génération des recommandations
+## Lancer le pretraitement ML
 
-SauvegardeIMC.py
-Sauvegarde des données utilisateur dans un fichier texte
+```bash
+python ml/preprocess.py
+```
 
-data/
-Dossier contenant les fichiers de sauvegarde
+Ce script :
 
-UTILISATION
+- charge le dataset prepare
+- separe `X` et `y`
+- encode `gender` et `activity_level`
+- scale `age`, `height`, `weight`, `bmi`
+- cree un split train/test
 
-Lancer l’application
+## Utilisation de l'application
 
-Entrer le poids (en kilogrammes)
+1. lancer `main.py`
+2. saisir le poids, la taille, l'age, le genre et l'activite
+3. cliquer sur `Calculer`
+4. consulter l'IMC, la categorie et les recommandations
+5. cliquer sur `Sauvegarder` pour enregistrer le resultat
 
-Entrer la taille (en mètres)
+## Etat actuel
 
-Cliquer sur le bouton de calcul
+- calcul IMC : OK
+- recommandations reglees par regles metier : OK
+- sauvegarde SQLite : OK
+- export CSV : OK
+- preparation dataset ML : OK
+- preprocessing ML : OK
+- prediction ML dans la GUI : placeholder
 
-Consulter l’IMC et la catégorie associée
-
-Les données sont automatiquement sauvegardées
-
-OBJECTIFS DU PROJET
-
-Comprendre et appliquer une architecture pipeline
-
-Apprendre la modularité en Python
-
-Séparer l’interface, la logique métier et la persistance
-
-Développer un projet structuré comme en contexte professionnel
-
-LICENCE
-
-Projet libre d’utilisation à des fins éducatives et personnelles.
-
-AUTEUR
+## Auteur
 
 Peter El Hadad
-Projet Python – Architecture Pipeline
