@@ -10,10 +10,11 @@ from app.validator import UserInputValidator
 def load_configuration():
     base_dir = Path(__file__).resolve().parent
     data_dir = base_dir / "data"
+    raw_data_dir = data_dir / "raw"
     app_config = {
         "db_path": data_dir / "data_imc.db",
         "model_path": None,
-        "recommendation_path": data_dir / "recommandations.json",
+        "recommendation_path": raw_data_dir / "recommandations.json",
     }
     return app_config
 

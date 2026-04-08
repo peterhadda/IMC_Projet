@@ -4,13 +4,22 @@ from pathlib import Path
 
 class RecommendationService:
     def __init__(self, json_path=None):
-        default_path = Path(__file__).resolve().parent.parent / "data" / "recommandations.json"
+        project_data_dir = Path(__file__).resolve().parent.parent / "data"
+        default_path = project_data_dir / "recommandations.json"
+        fallback_path = project_data_dir / "raw" / "recommandations.json"
+
         self.json_path = Path(json_path) if json_path else default_path
+        if not self.json_path.exists() and fallback_path.exists():
+            self.json_path = fallback_path
+
         self.category_advice_map = {}
         self.risk_advice_map = {}
         self._load_recommendations()
 
     def _load_recommendations(self):
+        if not self.json_path.exists():
+            raise FileNotFoundError(f"Fichier de recommandations introuvable: {self.json_path}")
+
         with self.json_path.open("r", encoding="utf-8") as json_file:
             payload = json.load(json_file)
 
