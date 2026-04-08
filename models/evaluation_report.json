@@ -1,0 +1,12 @@
+{
+  "model_name": "Logistic Regression",
+  "accuracy": 0.6666666666666666,
+  "precision": 0.5,
+  "recall": 0.6666666666666666,
+  "f1_score": 0.5555555555555555,
+  "status": "Modele non valide",
+  "is_validated": false,
+  "minimum_accepted_f1_score": 0.6,
+  "gui_decision": "interdire",
+  "message": "Le modele peut etre utilise uniquement s'il a ete valide."
+}

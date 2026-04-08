@@ -1,0 +1,38 @@
+{
+  "feature_order": [
+    "age",
+    "gender",
+    "height",
+    "weight",
+    "bmi",
+    "activity_level"
+  ],
+  "label_mapping": {
+    "high_risk": 0,
+    "low_risk": 1,
+    "moderate_risk": 2
+  },
+  "target_column": "target_risk",
+  "numeric_features": [
+    "age",
+    "height",
+    "weight",
+    "bmi"
+  ],
+  "categorical_features": [
+    "gender",
+    "activity_level"
+  ],
+  "encoded_feature_names": [
+    "numeric__age",
+    "numeric__height",
+    "numeric__weight",
+    "numeric__bmi",
+    "categorical__gender_female",
+    "categorical__gender_male",
+    "categorical__activity_level_high",
+    "categorical__activity_level_low",
+    "categorical__activity_level_medium"
+  ],
+  "model_name": "Logistic Regression"
+}
