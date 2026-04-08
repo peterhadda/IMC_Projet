@@ -1,0 +1,16 @@
+age,gender,height,weight,bmi,activity_level,target_risk
+22,female,1.68,48.0,17.01,low,moderate_risk
+25,male,1.72,52.0,17.58,medium,moderate_risk
+31,female,1.65,60.0,22.04,medium,low_risk
+29,male,1.75,68.0,22.2,high,low_risk
+28,male,1.8,72.0,22.22,medium,low_risk
+45,female,1.69,74.0,25.91,low,moderate_risk
+39,male,1.78,81.0,25.56,medium,moderate_risk
+50,female,1.7,85.0,29.41,low,moderate_risk
+36,male,1.74,92.0,30.4,low,high_risk
+42,female,1.71,97.0,33.17,medium,high_risk
+47,male,1.73,105.0,35.09,low,high_risk
+54,female,1.67,110.0,39.44,low,high_risk
+58,male,1.72,118.0,39.89,low,high_risk
+61,female,1.7,125.0,43.25,low,high_risk
+49,male,1.76,138.0,44.55,medium,high_risk
